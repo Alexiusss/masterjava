@@ -3,6 +3,7 @@ package ru.javaops.masterjava.matrix;
 import java.util.Random;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
+
 public class MatrixUtil {
 
     // TODO implement parallel multiplication matrixA*matrixB
@@ -18,11 +19,18 @@ public class MatrixUtil {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
+        int secondMatrixColumn[] = new int[matrixSize];
+
         for (int i = 0; i < matrixSize; i++) {
+
+            for (int j = 0; j < matrixSize; j++) {
+                secondMatrixColumn[j] = matrixB[j][i];
+            }
+
             for (int j = 0; j < matrixSize; j++) {
                 int sum = 0;
                 for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * matrixB[k][j];
+                    sum += matrixA[i][k] * secondMatrixColumn[k];
                 }
                 matrixC[i][j] = sum;
             }
