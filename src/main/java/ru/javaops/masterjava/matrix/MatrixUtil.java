@@ -14,12 +14,12 @@ public class MatrixUtil {
         return matrixC;
     }
 
-    // TODO optimize by https://habrahabr.ru/post/114797/
+    // https://habrahabr.ru/post/114797/
     public static int[][] singleThreadMultiply(int[][] matrixA, int[][] matrixB) {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
-        int secondMatrixColumn[] = new int[matrixSize];
+        int[] secondMatrixColumn = new int[matrixSize];
 
         for (int i = 0; i < matrixSize; i++) {
 
@@ -28,9 +28,10 @@ public class MatrixUtil {
             }
 
             for (int j = 0; j < matrixSize; j++) {
+                int[] thisRow = matrixA[j];
                 int sum = 0;
                 for (int k = 0; k < matrixSize; k++) {
-                    sum += matrixA[i][k] * secondMatrixColumn[k];
+                    sum += thisRow[k] * secondMatrixColumn[k];
                 }
                 matrixC[i][j] = sum;
             }
