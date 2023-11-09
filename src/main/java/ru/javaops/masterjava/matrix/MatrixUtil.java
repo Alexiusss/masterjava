@@ -1,16 +1,32 @@
 package ru.javaops.masterjava.matrix;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
+import java.util.concurrent.*;
 
 public class MatrixUtil {
 
-    // TODO implement parallel multiplication matrixA*matrixB
-    public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor) throws InterruptedException, ExecutionException {
+    public static int[][] concurrentMultiply(int[][] matrixA, int[][] matrixB, ExecutorService executor)
+            throws InterruptedException {
         final int matrixSize = matrixA.length;
         final int[][] matrixC = new int[matrixSize][matrixSize];
 
+        List<Callable<Void>> tasks = new ArrayList<>();
+
+        for (int i = 0; i < matrixSize; i++) {
+            final int finalI = i;
+            tasks.add(() -> {
+                int[] secondMatrixColumn = new int[matrixSize];
+                for (int j = 0; j < matrixSize; j++) {
+                    secondMatrixColumn[j] = matrixB[j][finalI];
+                }
+                calculateSum(matrixA, matrixSize, matrixC, secondMatrixColumn, finalI);
+                return null;
+            });
+        }
+
+        executor.invokeAll(tasks);
         return matrixC;
     }
 
@@ -27,16 +43,21 @@ public class MatrixUtil {
                 secondMatrixColumn[j] = matrixB[j][i];
             }
 
-            for (int j = 0; j < matrixSize; j++) {
-                int[] thisRow = matrixA[j];
-                int sum = 0;
-                for (int k = 0; k < matrixSize; k++) {
-                    sum += thisRow[k] * secondMatrixColumn[k];
-                }
-                matrixC[i][j] = sum;
-            }
+            calculateSum(matrixA, matrixSize, matrixC, secondMatrixColumn, i);
         }
         return matrixC;
+    }
+
+    private static void calculateSum(int[][] matrixA, int matrixSize, int[][] matrixC, int[] secondMatrixColumn, int finalI) {
+        for (int j = 0; j < matrixSize; j++) {
+
+            int[] thisRow = matrixA[j];
+            int sum = 0;
+            for (int k = 0; k < matrixSize; k++) {
+                sum += thisRow[k] * secondMatrixColumn[k];
+            }
+            matrixC[finalI][j] = sum;
+        }
     }
 
     public static int[][] create(int size) {
