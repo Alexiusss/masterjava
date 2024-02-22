@@ -1,13 +1,16 @@
-package ru.javaops.masterjava.xml.util;
+package masterjava.util;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
 import ru.javaops.masterjava.xml.schema.CityType;
 import ru.javaops.masterjava.xml.schema.ObjectFactory;
 import ru.javaops.masterjava.xml.schema.Payload;
+import ru.javaops.masterjava.xml.util.JaxbParser;
+import ru.javaops.masterjava.xml.util.Schemas;
 
 import javax.xml.bind.JAXBElement;
 import javax.xml.namespace.QName;
+import java.io.File;
 
 public class JaxbParserTest {
     private static final JaxbParser JAXB_PARSER = new JaxbParser(ObjectFactory.class);
@@ -18,6 +21,11 @@ public class JaxbParserTest {
 
     @Test
     public void testPayload() throws Exception {
+
+        String path = "src/test/resources";
+
+        File file = new File(path);
+
 //        JaxbParserTest.class.getResourceAsStream("/city.xml")
         Payload payload = JAXB_PARSER.unmarshal(
                 Resources.getResource("payload.xml").openStream());

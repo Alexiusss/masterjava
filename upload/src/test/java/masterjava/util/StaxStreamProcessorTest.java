@@ -1,10 +1,11 @@
-package ru.javaops.masterjava.xml.util;
+package masterjava.util;
 
 import com.google.common.io.Resources;
 import org.junit.Test;
 
 import javax.xml.stream.XMLStreamReader;
 import javax.xml.stream.events.XMLEvent;
+import ru.javaops.masterjava.xml.util.*;
 
 public class StaxStreamProcessorTest {
     @Test
